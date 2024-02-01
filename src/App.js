@@ -13,16 +13,16 @@ function App() {
 
   return (
     <div className="App">
-      <FilterableProductTable />
+      <FilterableProductTable products={products} />
     </div>
   );
 }
 
-export function FilterableProductTable() {
+export function FilterableProductTable({ products }) {
   return (
-    <div>
+    <div className="flex flex-col items-center mt-10">
       <SearchBar />
-      <ProductTable />
+      <ProductTable products={products} />
     </div>
   )
 }
@@ -35,28 +35,56 @@ export function SearchBar() {
   )
 }
 
-export function ProductTable() {
+export function ProductTable({ products }) {
+  const rows = [];
+  let lastCategory = null;
+
+  products.forEach((product, index) => {
+    if(lastCategory != product.category){
+      lastCategory = product.category;
+
+      rows.push(<ProductCategoryRow category={product.category} key={`category-${index}`} />);
+    }
+
+    rows.push(<ProductRow product={product} index={index} key={`product-${index}`} />);
+  });
+
   return (
-    <div>
-      <ProductCategoryRow />
-      <ProductRow />
+    <div className="mt-10">
+      <table className="min-w-xl">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          { rows }
+        </tbody>
+      </table>
     </div>
   )
 }
 
-export function ProductRow() {
+export function ProductRow({ product, index }) {
+  const name = product.stocked ? product.name :
+              <span style={{ color: 'red' }}> { product.name } </span>
   return (
-    <div>
-      Product row
-    </div>
+    <tr>
+      <td>{ name }</td>
+      <td>{ product.price }</td>
+    </tr>
   )
 }
 
-export function ProductCategoryRow() {
+export function ProductCategoryRow({ category, index }) {
   return (
-    <div>
-      Product Category row
-    </div>
+    <tr>
+      <th colSpan="2">
+        { category }
+      </th>
+    </tr>
   )
 }
 

@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.mt-10 {
+  margin-top: 40px;
+}
+
+.min-w-xl {
+  min-width: 640px;
+}
+
+.text-red {
+  color: red;
+}
