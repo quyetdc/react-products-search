@@ -29,9 +29,15 @@ export function FilterableProductTable({ products }) {
 
 export function SearchBar() {
   return (
-    <div>
-      Search box
-    </div>
+    <form style={{ textAlign: "left"}}>
+      <input type="text" placeholder="Search..." />
+      <br />
+      <label className="mt-5 block">
+        <input type="checkbox" />
+        {' '}
+        Only show products in stock
+      </label>
+    </form>
   )
 }
 
