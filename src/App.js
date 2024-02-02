@@ -1,24 +1,15 @@
 import { useState } from "react";
 import './App.css';
 
-const PRODUCTS = [
-  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
-];
-
-function App() {
+function App({ products }) {
   return (
     <div className="App">
-      <FilterableProductTable products={PRODUCTS} />
+      <FilterableProductTable products={products} />
     </div>
   );
 }
 
-export function FilterableProductTable({ products }) {
+function FilterableProductTable({ products }) {
   const [filterText, setFilterText] = useState('');
   const [inStockOnly, setInStockOnly] = useState(false);
 
@@ -55,7 +46,7 @@ function SearchBar({
 
   return (
     <form style={{ textAlign: "left"}}>
-      <input type="text" placeholder="Search..." value={filterText} onChange={onFilterTextChange}/>
+      <input type="text" id="search-field" placeholder="Search..." value={filterText} onChange={onFilterTextChange} />
       <br />
       <label className="mt-5 block">
         <input type="checkbox" checked={inStockOnly} onChange={onSetInStockOnlyChange} />
@@ -66,7 +57,7 @@ function SearchBar({
   )
 }
 
-export function ProductTable({ products, filterText, inStockOnly }) {
+function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
@@ -102,7 +93,7 @@ export function ProductTable({ products, filterText, inStockOnly }) {
   )
 }
 
-export function ProductRow({ product, index }) {
+function ProductRow({ product }) {
   const name = product.stocked ? product.name :
               <span style={{ color: 'red' }}> { product.name } </span>
   return (
@@ -113,7 +104,7 @@ export function ProductRow({ product, index }) {
   )
 }
 
-export function ProductCategoryRow({ category, index }) {
+function ProductCategoryRow({ category }) {
   return (
     <tr>
       <th colSpan="2">
