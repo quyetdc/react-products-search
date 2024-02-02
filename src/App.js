@@ -1,19 +1,19 @@
 import { useState } from "react";
 import './App.css';
 
-function App() {
-  const products = [
-    { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-    { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-    { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-    { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-    { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-    { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
-  ];
+const PRODUCTS = [
+  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
+  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
+  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+];
 
+function App() {
   return (
     <div className="App">
-      <FilterableProductTable products={products} />
+      <FilterableProductTable products={PRODUCTS} />
     </div>
   );
 }
@@ -26,7 +26,10 @@ export function FilterableProductTable({ products }) {
     <div className="flex flex-col items-center mt-10">
       <SearchBar
         filterText={filterText}
-        inStockOnly={inStockOnly} />
+        setFilterText={setFilterText}
+        inStockOnly={inStockOnly}
+        setInStockOnly={setInStockOnly}
+        />
 
       <ProductTable products={products}
         filterText={filterText}
@@ -35,13 +38,27 @@ export function FilterableProductTable({ products }) {
   )
 }
 
-export function SearchBar({ filterText, inStockOnly }) {
+function SearchBar({
+  filterText,
+  inStockOnly,
+  setFilterText,
+  setInStockOnly
+}) {
+
+  function onFilterTextChange(event) {
+    setFilterText(event.target.value);
+  }
+
+  function onSetInStockOnlyChange(event) {
+    setInStockOnly(event.target.checked);
+  }
+
   return (
     <form style={{ textAlign: "left"}}>
-      <input type="text" placeholder="Search..." />
+      <input type="text" placeholder="Search..." value={filterText} onChange={onFilterTextChange}/>
       <br />
       <label className="mt-5 block">
-        <input type="checkbox" />
+        <input type="checkbox" checked={inStockOnly} onChange={onSetInStockOnlyChange} />
         {' '}
         Only show products in stock
       </label>
@@ -60,7 +77,11 @@ export function ProductTable({ products, filterText, inStockOnly }) {
       rows.push(<ProductCategoryRow category={product.category} key={`category-${index}`} />);
     }
 
-    rows.push(<ProductRow product={product} index={index} key={`product-${index}`} />);
+    if (filterText.length == 0 || product.name.toLowerCase().includes(filterText.toLowerCase())){
+      if (!inStockOnly || product.stocked) {
+        rows.push(<ProductRow product={product} index={index} key={`product-${index}`} />);
+      }
+    }
   });
 
   return (
