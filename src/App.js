@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import { useState } from "react";
 import './App.css';
 
 function App() {
@@ -19,15 +19,23 @@ function App() {
 }
 
 export function FilterableProductTable({ products }) {
+  const [filterText, setFilterText] = useState('');
+  const [inStockOnly, setInStockOnly] = useState(false);
+
   return (
     <div className="flex flex-col items-center mt-10">
-      <SearchBar />
-      <ProductTable products={products} />
+      <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly} />
+
+      <ProductTable products={products}
+        filterText={filterText}
+        inStockOnly={inStockOnly} />
     </div>
   )
 }
 
-export function SearchBar() {
+export function SearchBar({ filterText, inStockOnly }) {
   return (
     <form style={{ textAlign: "left"}}>
       <input type="text" placeholder="Search..." />
@@ -41,7 +49,7 @@ export function SearchBar() {
   )
 }
 
-export function ProductTable({ products }) {
+export function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
